@@ -1,0 +1,8 @@
+-- Access Postgress Instance in Docker
+
+docker ps
+docker exec -it "REPLACE WITH POSTGRES CONTAINER ID" bin/bash
+
+-- LOG IN DB Instance
+psql -U "user" -d "Instance Name"
+exit - \q

@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: app.name.db
+    image: postgres:11.1
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USER}"
+    networks:
+      - default
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+    restart: always
+
+  app:
+    container_name: app.name.api
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    depends_on:
+      - db
+    links:
+      - db
+    networks:
+      - default
+      - ng-internal-network
+
+networks:
+  default:
+    driver: bridge
+  ng-internal-network:
+    external: true
+
+volumes:
+  postgres:
+    external: false
+    
